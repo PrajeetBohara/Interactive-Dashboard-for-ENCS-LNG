@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Dashboard.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Dashboard.Pages"
+    xmlns:controls="clr-namespace:Dashboard.Controls"
+    Shell.FlyoutBehavior="Flyout"
+    Shell.NavBarIsVisible="False"
+    Shell.TabBarIsVisible="False">
+
+    <!-- Flyout header (optional) 
+    <FlyoutHeader>
+        <Grid Padding="16" BackgroundColor="#111318">
+            <Label Text="ENCS Dashboard"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   FontSize="20" />
+        </Grid>
+    </FlyoutHeader>
+    -->
+
+    <!-- Flyout items (side menu options) -->
+    <FlyoutItem Title="Home" Route="Home">
+        <ShellContent Title="Home" ContentTemplate="{DataTemplate pages:HomePage}" />
+    </FlyoutItem>
+
+    <!-- Placeholder routes we'll build later -->
+    <FlyoutItem Title="Student Clubs" Route="Clubs">
+        <ShellContent Title="Student Clubs">
+            <ContentPage>
+                <Grid RowDefinitions="Auto,*">
+                    <controls:TopBar Grid.Row="0" />
+                    <Grid Grid.Row="1" Padding="24">
+                        <Label Text="Student Clubs Page (placeholder)" TextColor="White" />
+                    </Grid>
+                </Grid>
+            </ContentPage>
+        </ShellContent>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Senior Design Projects" Route="Senior Projects">
+        <ShellContent Title="Senior Design Projects">
+            <ContentPage>
+                <Grid RowDefinitions="Auto,*">
+                    <controls:TopBar Grid.Row="0" />
+                    <Grid Grid.Row="1" Padding="24">
+                        <Label Text="Senior Design Projects Page (placeholder)" TextColor="White" />
+                    </Grid>
+                </Grid>
+            </ContentPage>
+        </ShellContent>
+    </FlyoutItem>
+
+    <FlyoutItem Title="E-Week" Route="E-Week">
+        <ShellContent Title="E-Week">
+            <ContentPage>
+                <Grid RowDefinitions="Auto,*">
+                    <controls:TopBar Grid.Row="0" />
+                    <Grid Grid.Row="1" Padding="24">
+                        <Label Text="E-Week Page (placeholder)" TextColor="White" />
+                    </Grid>
+                </Grid>
+            </ContentPage>
+        </ShellContent>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Academic Catalogue" Route="Academic Catalogue">
+        <ShellContent Title="Academic Catalogue">
+            <ContentPage>
+                <Grid RowDefinitions="Auto,*">
+                    <controls:TopBar Grid.Row="0" />
+                    <Grid Grid.Row="1" Padding="24">
+                        <Label Text="Academic Catalogue Page (placeholder)" TextColor="White" />
+                    </Grid>
+                </Grid>
+            </ContentPage>
+        </ShellContent>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Gallery" Route="Gallery">
+        <ShellContent Title="Gallery">
+            <ContentPage>
+                <Grid RowDefinitions="Auto,*">
+                    <controls:TopBar Grid.Row="0" />
+                    <Grid Grid.Row="1" Padding="24">
+                        <Label Text="Gallery Page (placeholder)" TextColor="White" />
+                    </Grid>
+                </Grid>
+            </ContentPage>
+        </ShellContent>
+    </FlyoutItem>
+
+    <!-- Additional routes for View All pages -->
+    <FlyoutItem Title="All Events" Route="AllEvents">
+        <ShellContent Title="All Events" ContentTemplate="{DataTemplate pages:AllEventsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="All Announcements" Route="AllAnnouncements">
+        <ShellContent Title="All Announcements" ContentTemplate="{DataTemplate pages:AllAnnouncementsPage}" />
+    </FlyoutItem>
+
+    <FlyoutItem Title="Faculty Directory" Route="Faculty">
+        <ShellContent Title="Faculty Directory">
+            <ContentPage>
+                <Grid RowDefinitions="Auto,*">
+                    <controls:TopBar Grid.Row="0" />
+                    <Grid Grid.Row="1" Padding="24">
+                        <Label Text="Faculty Directory Page (placeholder)" TextColor="White" />
+                    </Grid>
+                </Grid>
+            </ContentPage>
+        </ShellContent>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Sponsors and Donors" Route="Sponsors and Donors">
+        <ShellContent Title="Sponsors and Donors">
+            <ContentPage>
+                <Grid RowDefinitions="Auto,*">
+                    <controls:TopBar Grid.Row="0" />
+                    <Grid Grid.Row="1" Padding="24">
+                        <Label Text="Sponsors and Donors Page (placeholder)" TextColor="White" />
+                    </Grid>
+                </Grid>
+            </ContentPage>
+        </ShellContent>
+    </FlyoutItem>
+
+    <FlyoutItem Title="Contact" Route="Contact">
+        <ShellContent Title="Contact">
+            <ContentPage>
+                <Grid RowDefinitions="Auto,*">
+                    <controls:TopBar Grid.Row="0" />
+                    <Grid Grid.Row="1" Padding="24">
+                        <Label Text="Contact Page (placeholder)" TextColor="White" />
+                    </Grid>
+                </Grid>
+            </ContentPage>
+        </ShellContent>
+    </FlyoutItem>
+
+</Shell>

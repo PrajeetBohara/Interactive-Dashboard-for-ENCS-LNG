@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!---Code written by Prajeet Bohara iwth the help of contenview template provided by .NET MAUI
+This code file gives UI for the top navigation bar that will be present throughout all the pages-->
+    
+<!-- DynamicResouce are used from the app.xaml files which is the global resource file for the project-->
+
+<ContentView
+    x:Class="Dashboard.Controls.TopBar"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    BackgroundColor="{DynamicResource TopBarBackground}"
+    HeightRequest="80"
+    Padding="20,16,20,16">
+    
+    <!-- Main Grid Layout for the icons: All elements in one horizontal row at the top bar -->
+    <Grid ColumnDefinitions="Auto,12,Auto,12,Auto,*,20,Auto,20,Auto,20,Auto" 
+          RowDefinitions="Auto" 
+          VerticalOptions="Center">
+        
+        <!-- Hamburger Menu Icon -->
+        <Grid Grid.Column="0" 
+              WidthRequest="40" 
+              HeightRequest="40" 
+              VerticalOptions="Center">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnMenuTapped" />
+            </Grid.GestureRecognizers>
+       
+            <VerticalStackLayout Spacing="3" 
+                                HorizontalOptions="Center" 
+                                VerticalOptions="Center">
+                <BoxView HeightRequest="3" 
+                         WidthRequest="20" 
+                         CornerRadius="1.5" 
+                         BackgroundColor="{DynamicResource TopBarForeground}" />
+                <BoxView HeightRequest="3" 
+                         WidthRequest="20" 
+                         CornerRadius="1.5" 
+                         BackgroundColor="{DynamicResource TopBarForeground}" />
+                <BoxView HeightRequest="3" 
+                         WidthRequest="20" 
+                         CornerRadius="1.5" 
+                         BackgroundColor="{DynamicResource TopBarForeground}" />
+            </VerticalStackLayout>
+        </Grid>
+
+        <!-- Home Icon -->
+        <Grid Grid.Column="2" 
+              WidthRequest="80" 
+              HeightRequest="40" 
+              VerticalOptions="Center">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnHomeTapped" />
+            </Grid.GestureRecognizers>
+            <Grid ColumnDefinitions="Auto,Auto" 
+                  VerticalOptions="Center">
+  
+                <Grid Grid.Column="0"
+                      WidthRequest="24" 
+                      HeightRequest="24" 
+                      VerticalOptions="Center"
+                      Margin="0,0,8,0">
+                    <!-- House shape -->
+                    <Path Data="M12,2 L22,8 L22,20 L14,20 L14,14 L10,14 L10,20 L2,20 L2,8 Z" 
+                          Fill="{DynamicResource TopBarBackground}" 
+                          Stroke="{DynamicResource TopBarBackground}" 
+                          StrokeThickness="1" />
+                </Grid>
+                <!--We are not using text for now. We will leave this for now so that it can be used in the future-->
+                <!-- Home text 
+                <Label Grid.Column="1"
+                       Text="Home"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       TextColor="{DynamicResource TopBarForeground}"
+                       VerticalTextAlignment="Center" />-->
+            </Grid>
+        </Grid>
+
+        <!-- Department Title -->
+        <Label Grid.Column="4"
+               Text="Department of Engineering &amp; Computer Science"
+               FontSize="{OnPlatform Default=14, Android=12, iOS=12}"
+               FontAttributes="Bold"
+               TextColor="{DynamicResource TopBarForeground}"
+               VerticalTextAlignment="Center"
+               HorizontalTextAlignment="Start"
+               LineBreakMode="TailTruncation"
+               WidthRequest="280"
+               MaxLines="1" />
+
+        <!-- Search Bar Placeholder. The functionality has not been implemented yet -->
+        <Frame Grid.Column="7"
+               BackgroundColor="{DynamicResource TopBarSearchBackground}"
+               CornerRadius="20"
+               Padding="0"
+               HasShadow="False"
+               VerticalOptions="Center"
+               WidthRequest="180">
+            <Grid ColumnDefinitions="Auto,*" 
+                  VerticalOptions="Center">
+                <!-- Search Icon -->
+                <Label Grid.Column="0"
+                       Text="🔍"
+                       FontSize="16"
+                       TextColor="{DynamicResource TopBarPlaceholder}"
+                       VerticalTextAlignment="Center"
+                       Margin="12,0,8,0" />
+                <!-- Search Entry Bar-->
+                <Entry Grid.Column="1"
+                       x:Name="SearchEntry"
+                       Placeholder="Search..."
+                       ClearButtonVisibility="WhileEditing"
+                       BackgroundColor="Transparent"
+                       TextColor="{DynamicResource TopBarForeground}"
+                       PlaceholderColor="{DynamicResource TopBarPlaceholder}"
+                       FontSize="14"
+                       HeightRequest="36"
+                       Margin="0,0,12,0" />
+            </Grid>
+        </Frame>
+
+        <!-- Weather Information (Icon + Text) -->
+        <Grid Grid.Column="9" 
+              ColumnDefinitions="Auto,Auto" 
+              VerticalOptions="Center"
+              HorizontalOptions="End">
+            <Image x:Name="WeatherIcon"
+                   Grid.Column="0"
+                   WidthRequest="24"
+                   HeightRequest="24"
+                   Margin="0,0,8,0"
+                   VerticalOptions="Center" />
+            <Label Grid.Column="1"
+                   x:Name="WeatherLabel"
+                   Text="72°F • Partly Cloudy"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="{DynamicResource TopBarForeground}"
+                   VerticalTextAlignment="Center"
+                   HorizontalTextAlignment="End" />
+        </Grid>
+
+        <!-- Current time-->
+        <Label Grid.Column="11"
+               x:Name="ClockLabel"
+               Text="04:16 PM • Sep 19"
+               FontSize="14"
+               FontAttributes="Bold"
+               TextColor="{DynamicResource TopBarForeground}"
+               VerticalTextAlignment="Center"
+               HorizontalTextAlignment="End" />
+    </Grid>
+</ContentView>
