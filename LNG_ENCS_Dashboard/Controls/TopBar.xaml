@@ -80,13 +80,13 @@ This code file gives UI for the top navigation bar that will be present througho
         <!-- Department Title -->
         <Label Grid.Column="4"
                Text="Department of Engineering &amp; Computer Science"
-               FontSize="{OnPlatform Default=14, Android=12, iOS=12}"
+               FontSize="{OnPlatform Default=14, Android=13, iOS=12}"
                FontAttributes="Bold"
                TextColor="{DynamicResource TopBarForeground}"
                VerticalTextAlignment="Center"
                HorizontalTextAlignment="Start"
                LineBreakMode="TailTruncation"
-               WidthRequest="280"
+               WidthRequest="330"
                MaxLines="1" />
 
         <!-- Search Bar Placeholder. The functionality has not been implemented yet -->
