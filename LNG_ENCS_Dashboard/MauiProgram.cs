@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using Dashboard.Services;
 
 namespace Dashboard
 {
@@ -18,6 +19,11 @@ namespace Dashboard
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif
+
+    // Register services
+    builder.Services.AddSingleton<EWeekGalleryService>();
+    builder.Services.AddSingleton<FacultyService>();
+    builder.Services.AddSingleton<ResearchImageService>();
 
             return builder.Build();
         }
