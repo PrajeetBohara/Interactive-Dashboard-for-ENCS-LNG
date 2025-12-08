@@ -1,0 +1,132 @@
+from flask import Flask, request, jsonify, send_from_directory
+from flask_cors import CORS
+import os
+from openai import OpenAI
+from datetime import datetime
+from collections import defaultdict
+
+app = Flask(__name__, static_folder='wwwroot', static_url_path='')
+CORS(app)
+
+# OpenAI client
+openai_key = os.getenv('OPENAI_API_KEY')
+openai_client = None
+
+if openai_key:
+    try:
+        # Initialize OpenAI client - use minimal parameters to avoid version conflicts
+        openai_client = OpenAI(api_key=openai_key)
+    except Exception as e:
+        print(f"Warning: Could not initialize OpenAI client: {e}")
+        openai_client = None
+
+# In-memory transcript storage
+transcripts = defaultdict(list)
+
+# Track last update time per session (for efficient polling)
+last_updated = defaultdict(lambda: datetime.utcnow().isoformat())
+
+# Degree catalog links
+CATALOG_LINKS = [
+    "https://catalog.mcneese.edu/preview_program.php?catoid=97&poid=59137&_gl=1*1mrh98w*_gcl_au*MTk4MjAwMzc3MS4xNzYwMTUwNjgx",
+    "https://catalog.mcneese.edu/preview_program.php?catoid=97&poid=59280&_gl=1*1mrh98w*_gcl_au*MTk4MjAwMzc3MS4xNzYwMTUwNjgx",
+    "https://catalog.mcneese.edu/preview_program.php?catoid=97&poid=59024&_gl=1*1mrh98w*_gcl_au*MTk4MjAwMzc3MS4xNzYwMTUwNjgx"
+]
+
+# Serve HTML page
+@app.route('/')
+def index():
+    try:
+        return send_from_directory('wwwroot', 'index.html')
+    except Exception as e:
+        return f"Error loading page: {str(e)}", 500
+
+# Chat endpoint
+@app.route('/api/chat', methods=['POST'])
+def chat():
+    data = request.json
+    session_id = data.get('sessionId', 'demo')
+    question = data.get('question', '').strip()
+    
+    if not question:
+        return jsonify({'error': 'Question required'}), 400
+    
+    # Add user message (use PascalCase for C# compatibility)
+    transcripts[session_id].append({
+        'Role': 'user',
+        'Content': question,
+        'Timestamp': datetime.utcnow().isoformat()
+    })
+    
+    # Get AI answer
+    answer = "I'm sorry, but the OpenAI API key is not configured."
+    
+    if openai_client:
+        try:
+            # Simple prompt (can add RAG later if needed)
+            messages = [
+                {"role": "system", "content": "You are an academic advisor for McNeese State University. Provide helpful degree plan advice. Always cite sources and warn to verify with an official advisor."},
+                {"role": "user", "content": question}
+            ]
+            
+            # Add conversation history
+            for msg in transcripts[session_id][-4:]:
+                role = msg.get('Role', msg.get('role', ''))
+                content = msg.get('Content', msg.get('content', ''))
+                if role in ['user', 'assistant']:
+                    messages.append({"role": role.lower(), "content": content})
+            
+            response = openai_client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=messages
+            )
+            answer = response.choices[0].message.content
+        except Exception as e:
+            answer = f"Error: {str(e)}"
+    
+    # Add assistant message (use PascalCase for C# compatibility)
+    transcripts[session_id].append({
+        'Role': 'assistant',
+        'Content': answer,
+        'Timestamp': datetime.utcnow().isoformat()
+    })
+    
+    # Update last updated timestamp when a message is sent
+    last_updated[session_id] = datetime.utcnow().isoformat()
+    
+    return jsonify({'answer': answer, 'count': len(transcripts[session_id])})
+
+# Get transcript
+@app.route('/api/transcript')
+def get_transcript():
+    session_id = request.args.get('sessionId', 'demo')
+    # Convert to PascalCase for C# compatibility
+    result = []
+    for msg in transcripts.get(session_id, []):
+        result.append({
+            'Role': msg.get('Role', msg.get('role', 'assistant')),
+            'Content': msg.get('Content', msg.get('content', '')),
+            'Timestamp': msg.get('Timestamp', msg.get('timestamp', datetime.utcnow().isoformat()))
+        })
+    return jsonify(result)
+
+# Get last updated timestamp
+@app.route('/api/last-updated')
+def get_last_updated():
+    session_id = request.args.get('sessionId', 'demo')
+    return jsonify({'lastUpdated': last_updated.get(session_id, datetime.utcnow().isoformat())})
+
+# Clear transcript
+@app.route('/api/transcript/clear', methods=['POST'])
+def clear_transcript():
+    session_id = request.json.get('sessionId', 'demo') if request.json else 'demo'
+    if session_id in transcripts:
+        del transcripts[session_id]
+    if session_id in last_updated:
+        del last_updated[session_id]
+    return jsonify({'ok': True, 'sessionId': session_id})
+
+if __name__ == '__main__':
+    port = int(os.getenv('PORT', 5000))
+    app.run(host='0.0.0.0', port=port)
+
