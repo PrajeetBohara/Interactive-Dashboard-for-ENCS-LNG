@@ -14,7 +14,7 @@ public class EWeekGalleryService
     private readonly string _supabaseKey;
 
     /// <summary>
-    /// Initializes the EWeekGalleryService and sets up HTTP headers for Supabase access.
+    /// Initializes the EWeekGalleryService and sets up HTTP headers for Supabase all access.
     /// </summary>
     public EWeekGalleryService()
     {
