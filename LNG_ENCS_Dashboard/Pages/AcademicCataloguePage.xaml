@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Code written for Academic Catalogue Page -->
+<ContentPage
+    x:Class="Dashboard.Pages.AcademicCataloguePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Dashboard.Controls"
+    xmlns:models="clr-namespace:Dashboard.Models"
+    Title="Academic Catalogue">
+    
+    <Grid RowDefinitions="Auto,*">
+        <!-- Global TopBar -->
+        <controls:TopBar ZIndex="10" Grid.Row="0" />
+        
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1" Padding="20">
+            <VerticalStackLayout Spacing="25">
+                <!-- Page Header -->
+                <VerticalStackLayout Spacing="8" HorizontalOptions="Center" Margin="0,0,0,20">
+                    <Label Text="📚"
+                           FontSize="48"
+                           HorizontalOptions="Center" />
+                    <Label Text="Academic Catalogue"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           TextColor="#003087"
+                           HorizontalOptions="Center" />
+                    <Label Text="Explore degree programs and course requirements"
+                           FontSize="16"
+                           TextColor="#002a54"
+                           HorizontalOptions="Center"
+                           HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+                
+                <!-- Programs by Degree Type -->
+                <VerticalStackLayout x:Name="ProgramsContainer" Spacing="20">
+                    <!-- Programs will be added programmatically -->
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
