@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Advisor Chat</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #003087 0%, #001f5c 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+        .logo-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo-container img {
+            max-width: 200px;
+            height: auto;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+        #questionInput {
+            flex: 1;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            font-size: 16px;
+        }
+        #questionInput::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        #sendButton {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            background: #FFD204;
+            color: #003087;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        #sendButton:hover:not(:disabled) {
+            transform: scale(1.05);
+        }
+        #sendButton:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo-container">
+            <img src="/departmentlogo.png" alt="Department Logo" />
+        </div>
+        
+        <div class="input-area">
+            <input 
+                type="text" 
+                id="questionInput" 
+                placeholder="Type your question here..."
+                autocomplete="off"
+            />
+            <button id="sendButton">Send</button>
+        </div>
+    </div>
+
+    <script>
+        // Use the same domain as the page
+        const API_URL = window.location.origin;
+        const sessionId = 'demo';
+        
+        const questionInput = document.getElementById('questionInput');
+        const sendButton = document.getElementById('sendButton');
+        
+        async function sendQuestion() {
+            const question = questionInput.value.trim();
+            if (!question) return;
+            
+            // Disable input
+            questionInput.disabled = true;
+            sendButton.disabled = true;
+            
+            // Clear input immediately
+            questionInput.value = '';
+            
+            try {
+                // Send to API - API will call OpenAI and store the response
+                const response = await fetch(`${API_URL}/api/chat`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        sessionId, 
+                        question 
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`API error: ${response.status} - ${errorText}`);
+                }
+                
+                // Message sent successfully - MAUI app will refresh automatically
+            } catch (err) {
+                console.error('Error sending question:', err);
+                alert('Error sending question. Please try again.');
+            } finally {
+                questionInput.disabled = false;
+                sendButton.disabled = false;
+                questionInput.focus();
+            }
+        }
+        
+        // Event listeners
+        sendButton.addEventListener('click', sendQuestion);
+        questionInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !sendButton.disabled) {
+                sendQuestion();
+            }
+        });
+        
+        // Clear session when page is closed or navigated away
+        window.addEventListener('beforeunload', async () => {
+            try {
+                await fetch(`${API_URL}/api/transcript/clear`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ sessionId })
+                });
+            } catch (err) {
+                // Ignore errors on page unload
+                console.error('Error clearing session:', err);
+            }
+        });
+    </script>
+</body>
+</html>
